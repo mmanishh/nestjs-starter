@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import { WinstonModule } from 'nest-winston';
 import { format, transports } from 'winston';
 import { setupApiDocs } from 'common/config/api-docs';
-import { HttpFilter } from 'common/filters';
+import { HttpExceptionFilter } from 'common/filters';
 import { loggerMiddleware } from 'common/middlewares';
 import { CustomValidationPipe } from 'common/pipes';
 import { AppModule } from 'modules/app/app.module';
@@ -33,7 +33,7 @@ async function bootstrap(): Promise<void> {
 
   app.use(cookieParser(configService.get('COOKIE_SECRET')));
   app.use(loggerMiddleware);
-  app.useGlobalFilters(new HttpFilter());
+  app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
     new CustomValidationPipe({
       forbidNonWhitelisted: true,

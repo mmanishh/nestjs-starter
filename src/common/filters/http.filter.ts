@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 
 @Catch()
-export class HttpFilter implements ExceptionFilter {
-  private readonly logger = new Logger(HttpFilter.name);
+export class HttpExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(HttpExceptionFilter.name);
 
   catch(exception: any, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
