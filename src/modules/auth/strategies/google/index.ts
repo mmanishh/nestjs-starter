@@ -1,38 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { use } from 'passport';
+import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth2';
 import { UserService } from 'modules/user/user.service';
 
 @Injectable()
-export class GoogleStrategy {
+export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
-    private readonly configService: ConfigService,
+    readonly configService: ConfigService,
     private readonly userService: UserService,
   ) {
-    this.init();
+    super({
+      clientID: configService.get('google.clientID'),
+      clientSecret: configService.get('google.clientSecret'),
+      callbackURL: configService.get('google.callbackURL'),
+    });
   }
 
-  private init(): void {
-    use(
-      'google',
-      new Strategy(
-        {
-          clientID: this.configService.get('google.clientID'),
-          clientSecret: this.configService.get('google.clientSecret'),
-          callbackURL: this.configService.get('google.callbackURL'),
-        },
-        async (
-          accessToken: string,
-          refreshToken: string,
-          profile: any,
-          done: any,
-        ): Promise<void> => {
-          const user = await this.userService.findOrCreate(profile);
+  async validate(
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+    done: any,
+  ) {
+    const user = await this.userService.findOrCreate(profile);
 
-          done(null, user);
-        },
-      ),
-    );
+    done(null, user);
   }
 }
