@@ -15,7 +15,6 @@ import {
 import config from 'common/config';
 import databaseConfig from 'common/config/database';
 import { EventsModule } from 'common/events/events.module';
-import { AuthModule } from 'modules/auth/auth.module';
 import { AppController } from './app.controller';
 
 const typeOrmConfig = {
@@ -39,7 +38,6 @@ const typeOrmConfig = {
       load: [config],
     }),
     TypeOrmModule.forRootAsync(typeOrmConfig),
-    AuthModule,
     EventsModule,
   ],
   controllers: [AppController],
