@@ -8,10 +8,35 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: node:16.3.0-alpine3.13
 
     strategy:
       matrix:
-        node-version: [16.x]
+        database-name:
+          - nestjs-starter-db
+        database-user:
+          - username
+        database-password:
+          - password
+        database-host:
+          - postgres
+        database-port:
+          - 5432
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: ${{ matrix.database-name }}
+          POSTGRES_USER: ${{ matrix.database-user }}
+          POSTGRES_PASSWORD: ${{ matrix.database-password }}
+        ports:
+          - ${{ matrix.database-port }}:${{ matrix.database-port }}
+        # Set health checks to wait until postgres has started
+        options: --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Github checkout
@@ -24,8 +49,14 @@ jobs:
 
       - run: npm ci
 
+      - run: npm run build
+
       - run: npm run lint
 
       - run: npm test
+
+      - run: npm run test:e2e
+        env:
+          DATABASE_URL: postgres://${{ matrix.database-user }}:${{ matrix.database-password }}@${{ matrix.database-host }}:${{ matrix.database-port }}/${{ matrix.database-name }}
 
       - run: npm audit
