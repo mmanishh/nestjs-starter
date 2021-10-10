@@ -59,4 +59,4 @@ jobs:
         env:
           DATABASE_URL: postgres://${{ matrix.database-user }}:${{ matrix.database-password }}@${{ matrix.database-host }}:${{ matrix.database-port }}/${{ matrix.database-name }}
 
-      - run: npm audit
+      - run: npm audit --audit-level=high
