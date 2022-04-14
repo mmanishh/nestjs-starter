@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { WinstonModule } from 'nest-winston';
 import { Subject } from 'rxjs';
 import { Connection } from 'typeorm';
 import {
@@ -14,6 +15,7 @@ import {
 } from 'typeorm-transactional-cls-hooked';
 import config from 'common/config';
 import databaseConfig from 'common/config/database';
+import { loggerConfig } from 'common/config/logger';
 import { EventsModule } from 'common/events/events.module';
 import { AppController } from './app.controller';
 
@@ -37,6 +39,7 @@ const typeOrmConfig = {
     ConfigModule.forRoot({
       load: [config],
     }),
+    WinstonModule.forRoot(loggerConfig),
     TypeOrmModule.forRootAsync(typeOrmConfig),
     EventsModule,
   ],

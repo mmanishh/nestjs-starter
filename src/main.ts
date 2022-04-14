@@ -1,10 +1,11 @@
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { WinstonModule, WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import cookieParser from 'cookie-parser';
-import { WinstonModule } from 'nest-winston';
-import { format, transports } from 'winston';
 import { setupApiDocs } from 'common/config/api-docs';
+import { loggerConfig } from 'common/config/logger';
 import { HttpExceptionFilter } from 'common/filters';
 import { loggerMiddleware } from 'common/middlewares';
 import { CustomValidationPipe } from 'common/pipes';
@@ -12,17 +13,10 @@ import { AppModule } from 'modules/app/app.module';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: WinstonModule.createLogger({
-      format: format.combine(format.timestamp(), format.json()),
-      transports: [
-        new transports.Console({
-          level: process.env.LOG_LEVEL || 'info',
-        }),
-      ],
-    }),
+    logger: WinstonModule.createLogger(loggerConfig),
   });
-  const logger = new Logger(bootstrap.name);
-  const configService = app.get('configService');
+  const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
+  const configService = app.get(ConfigService);
 
   app.enableCors({
     credentials: true,
