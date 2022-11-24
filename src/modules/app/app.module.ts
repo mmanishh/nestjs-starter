@@ -51,7 +51,6 @@ const typeOrmConfig = {
     },
   ],
 })
-@Injectable()
 export class AppModule implements OnApplicationShutdown {
   private readonly logger = new Logger(AppModule.name);
   private readonly shutdownListener$: Subject<void> = new Subject();
