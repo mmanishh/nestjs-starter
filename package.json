@@ -4,6 +4,9 @@
   "description": "Minimal NestJS boilerplate",
   "author": "",
   "license": "MIT",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

@@ -1,4 +1,4 @@
-FROM node:16-alpine3.11 as build_stage
+FROM node:18.12.1-alpine3.15 as build_stage
 
 RUN apk add --no-cache bash
 
@@ -11,7 +11,7 @@ COPY . .
 
 RUN npm run build
 
-FROM node:16-alpine3.11 as app_stage
+FROM node:18.12.1-alpine3.15 as app_stage
 
 RUN mkdir -p /home/app && chown -R node:node /home/app
 
