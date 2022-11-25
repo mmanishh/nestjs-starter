@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: node:16.3.0-alpine3.13
+    container: node:18.12.1-alpine3.15
 
     strategy:
       matrix:
@@ -22,6 +22,8 @@ jobs:
           - postgres
         database-port:
           - 5432
+        node-version:
+          - 18
 
     services:
       postgres:
@@ -40,10 +42,10 @@ jobs:
 
     steps:
       - name: Github checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -59,4 +61,4 @@ jobs:
         env:
           DATABASE_URL: postgres://${{ matrix.database-user }}:${{ matrix.database-password }}@${{ matrix.database-host }}:${{ matrix.database-port }}/${{ matrix.database-name }}
 
-      - run: npm audit --audit-level=high
+      - run: npm audit
