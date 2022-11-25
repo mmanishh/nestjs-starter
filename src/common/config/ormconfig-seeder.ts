@@ -11,7 +11,9 @@ const config = new DataSource({
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   entities: [path.resolve(`${__dirname}/../../**/**.entity{.ts,.js}`)],
-  migrations: [path.resolve(`${__dirname}/../../../database/seeders/*{.ts,.js}`)],
+  migrations: [
+    path.resolve(`${__dirname}/../../../database/seeders/*{.ts,.js}`),
+  ],
   migrationsTableName: 'seeders',
   logging: true,
   synchronize: false,

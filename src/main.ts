@@ -44,9 +44,10 @@ async function bootstrap(): Promise<void> {
 
 bootstrap();
 
-process.on('unhandledRejection', function handleUnhandledRejection(
-  err: Error,
-): void {
-  const logger = new Logger(handleUnhandledRejection.name);
-  logger.error(err.stack);
-});
+process.on(
+  'unhandledRejection',
+  function handleUnhandledRejection(err: Error): void {
+    const logger = new Logger(handleUnhandledRejection.name);
+    logger.error(err.stack);
+  },
+);

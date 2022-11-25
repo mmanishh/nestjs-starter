@@ -1,8 +1,4 @@
-import {
-  Logger,
-  Module,
-  OnApplicationShutdown,
-} from '@nestjs/common';
+import { Logger, Module, OnApplicationShutdown } from '@nestjs/common';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonModule } from 'nest-winston';
