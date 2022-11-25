@@ -2,21 +2,21 @@ import path from 'path';
 import { registerAs } from '@nestjs/config';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
-interface ConnectionOptions extends PostgresConnectionOptions {
-  keepConnectionAlive: boolean;
-}
-
 export default registerAs(
   'database',
-  (): ConnectionOptions => ({
-    entities: [path.join(__dirname, '/../../../**/*.entity.{js,ts}')],
-    keepConnectionAlive: true,
+  (): PostgresConnectionOptions => ({
     logging: false,
-    migrations: ['dist/database/migrations/*{.ts,.js}'],
+    entities: [path.resolve(`${__dirname}/../../**/**.entity{.ts,.js}`)],
+    migrations: [path.resolve(`${__dirname}/../../../database/migrations/*{.ts,.js}`)],
     migrationsRun: true,
     migrationsTableName: 'migrations',
+    keepConnectionAlive: true,
     synchronize: false,
     type: 'postgres',
-    url: process.env.DATABASE_URL,
-  }),
+    host: process.env.DATABASE_HOSTNAME,
+    port: Number(process.env.DATABASE_PORT),
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
+  }) as PostgresConnectionOptions,
 );

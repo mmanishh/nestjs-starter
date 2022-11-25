@@ -46,7 +46,7 @@ npm test
 ### Migrations
 
 ```bash
-npm run migration:generate <MIGRATION_NAME>
+npm run migration:generate database/migrations/<MIGRATION_NAME>
 npm run migrate
 npm run migrate:down
 ```
@@ -54,7 +54,7 @@ npm run migrate:down
 ### Seeders
 
 ```bash
-npm run seed:generate <SEEDER_NAME>
+npm run seed:generate database/seeders/<SEEDER_NAME>
 npm run seed
 npm run seed:down
 ```

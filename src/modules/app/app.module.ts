@@ -1,5 +1,4 @@
 import {
-  Injectable,
   Logger,
   Module,
   OnApplicationShutdown,
@@ -8,7 +7,7 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonModule } from 'nest-winston';
 import { Subject } from 'rxjs';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import {
   initializeTransactionalContext,
   patchTypeORMRepositoryWithBaseRepository,
@@ -31,6 +30,10 @@ const typeOrmConfig = {
     initializeTransactionalContext();
     patchTypeORMRepositoryWithBaseRepository();
     return configService.get('database');
+  },
+  dataSourceFactory: async (options) => {
+    const dataSource = await new DataSource(options).initialize();
+    return dataSource;
   },
 };
 
@@ -55,23 +58,11 @@ export class AppModule implements OnApplicationShutdown {
   private readonly logger = new Logger(AppModule.name);
   private readonly shutdownListener$: Subject<void> = new Subject();
 
-  constructor(private readonly connection: Connection) {}
-
-  closeDatabaseConnection = async (): Promise<void> => {
-    try {
-      await this.connection.close();
-      this.logger.log('Database connection is closed');
-    } catch (error) {
-      this.logger.error(error.message);
-    }
-  };
-
   onApplicationShutdown = async (signal: string): Promise<void> => {
     if (!signal) return;
     this.logger.log(`Detected signal: ${signal}`);
 
     this.shutdownListener$.next();
-    return this.closeDatabaseConnection();
   };
 
   subscribeToShutdown = (shutdownFn: () => void): void => {
