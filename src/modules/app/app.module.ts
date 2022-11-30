@@ -27,10 +27,7 @@ const typeOrmConfig = {
     patchTypeORMRepositoryWithBaseRepository();
     return configService.get('database');
   },
-  dataSourceFactory: async (options) => {
-    const dataSource = await new DataSource(options).initialize();
-    return dataSource;
-  },
+  dataSourceFactory: async (options) => new DataSource(options).initialize(),
 };
 
 @Module({
