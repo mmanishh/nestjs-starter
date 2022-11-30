@@ -3,7 +3,6 @@ import * as path from 'path';
 import { DataSource } from 'typeorm';
 
 const config = new DataSource({
-  name: 'seeder',
   type: 'postgres',
   host: process.env.DATABASE_HOSTNAME,
   port: Number(process.env.DATABASE_PORT),
