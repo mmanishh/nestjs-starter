@@ -12,6 +12,7 @@ import config from 'common/config';
 import databaseConfig from 'common/config/database';
 import { loggerConfig } from 'common/config/logger';
 import { EventsModule } from 'common/events/events.module';
+import { UsersModule } from 'modules/users/users.module';
 import { AppController } from './app.controller';
 
 const typeOrmConfig = {
@@ -41,6 +42,7 @@ const typeOrmConfig = {
     WinstonModule.forRoot(loggerConfig),
     TypeOrmModule.forRootAsync(typeOrmConfig),
     EventsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
