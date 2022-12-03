@@ -4,10 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonModule } from 'nest-winston';
 import { Subject } from 'rxjs';
 import { DataSource } from 'typeorm';
-import {
-  initializeTransactionalContext,
-  patchTypeORMRepositoryWithBaseRepository,
-} from 'typeorm-transactional-cls-hooked';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 import config from 'common/config';
 import databaseConfig from 'common/config/database';
 import { loggerConfig } from 'common/config/logger';
@@ -22,12 +19,10 @@ const typeOrmConfig = {
     }),
   ],
   inject: [ConfigService],
-  useFactory: async (configService: ConfigService) => {
-    initializeTransactionalContext();
-    patchTypeORMRepositoryWithBaseRepository();
-    return configService.get('database');
-  },
-  dataSourceFactory: async (options) => new DataSource(options).initialize(),
+  useFactory: async (configService: ConfigService) =>
+    configService.get('database'),
+  dataSourceFactory: async (options) =>
+    addTransactionalDataSource(new DataSource(options)).initialize(),
 };
 
 @Module({

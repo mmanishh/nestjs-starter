@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { WinstonModule, WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import cookieParser from 'cookie-parser';
+import { initializeTransactionalContext } from 'typeorm-transactional';
 import { setupApiDocs } from 'common/config/api-docs';
 import { loggerConfig } from 'common/config/logger';
 import { HttpExceptionFilter } from 'common/filters';
@@ -12,6 +13,7 @@ import { CustomValidationPipe } from 'common/pipes';
 import { AppModule } from 'modules/app/app.module';
 
 async function bootstrap(): Promise<void> {
+  initializeTransactionalContext();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: WinstonModule.createLogger(loggerConfig),
   });

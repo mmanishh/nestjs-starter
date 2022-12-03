@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+// import { Transactional } from 'typeorm-transactional';
 import { CreateUserDto } from './create-user.dto';
 import { UsersRepository } from './users.repository';
 
@@ -15,6 +16,7 @@ export class UsersService {
     return foundUser;
   }
 
+  // @Transactional()
   async createUser(newUser: CreateUserDto) {
     return this.userRepository.createUser(newUser);
   }
