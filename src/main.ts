@@ -11,6 +11,7 @@ import { HttpExceptionFilter } from 'common/filters';
 import { loggerMiddleware } from 'common/middlewares';
 import { CustomValidationPipe } from 'common/pipes';
 import { AppModule } from 'modules/app/app.module';
+import { CustomConfigService } from 'common/config/custom-config.service';
 
 async function bootstrap(): Promise<void> {
   initializeTransactionalContext();
@@ -18,16 +19,16 @@ async function bootstrap(): Promise<void> {
     logger: WinstonModule.createLogger(loggerConfig),
   });
   const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
-  const configService = app.get(ConfigService);
+  const configService = app.get(CustomConfigService);
 
   app.enableCors({
     credentials: true,
-    origin: configService.get('CLIENT_URL'),
+    origin: configService.CLIENT_URL,
   });
   app.enableShutdownHooks();
   app.get(AppModule).subscribeToShutdown(() => app.close());
 
-  app.use(cookieParser(configService.get('COOKIE_SECRET')));
+  app.use(cookieParser(configService.COOKIE_SECRET));
   app.use(loggerMiddleware);
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
@@ -39,8 +40,8 @@ async function bootstrap(): Promise<void> {
   );
   setupApiDocs(app);
 
-  await app.listen(configService.get('PORT')).then(() => {
-    logger.log(`Server is running on port ${configService.get('PORT')}`);
+  await app.listen(configService.PORT).then(() => {
+    logger.log(`Server is running on port ${configService.PORT}`);
   });
 }
 
