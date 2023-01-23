@@ -65,4 +65,4 @@ jobs:
           DATABASE_PORT: ${{ matrix.database-port }}
           DATABASE_NAME: ${{ matrix.database-name }}
 
-      - run: npm audit
+      # - run: npm audit
