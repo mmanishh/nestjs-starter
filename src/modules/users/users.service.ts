@@ -16,6 +16,10 @@ export class UsersService {
     return foundUser;
   }
 
+  async findAll() {
+    return this.userRepository.find();
+  }
+
   // @Transactional()
   async createUser(newUser: CreateUserDto) {
     return this.userRepository.createUser(newUser);

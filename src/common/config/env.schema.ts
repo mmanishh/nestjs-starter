@@ -1,5 +1,5 @@
-import { Expose, plainToInstance, Type } from "class-transformer";
-import { IsInt, IsNotEmpty, validateSync } from "class-validator";
+import { Expose, plainToInstance, Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, validateSync } from 'class-validator';
 
 export class EnvironmentVariablesSchema {
   @Expose()
@@ -39,15 +39,15 @@ export class EnvironmentVariablesSchema {
 }
 
 export const validate = (config: Record<string, unknown>) => {
-  const validatedConfig = plainToInstance(
-    EnvironmentVariablesSchema,
-    config,
-    { enableImplicitConversion: true },
-  );
-  const errors = validateSync(validatedConfig, { skipMissingProperties: false });
+  const validatedConfig = plainToInstance(EnvironmentVariablesSchema, config, {
+    enableImplicitConversion: true,
+  });
+  const errors = validateSync(validatedConfig, {
+    skipMissingProperties: false,
+  });
 
   if (errors.length > 0) {
     throw new Error(errors.toString());
   }
   return validatedConfig;
-}
+};
