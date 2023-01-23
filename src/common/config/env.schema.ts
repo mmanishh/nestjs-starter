@@ -2,9 +2,11 @@ import { Expose, plainToInstance, Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, validateSync } from 'class-validator';
 
 export class EnvironmentVariablesSchema {
+  @IsNotEmpty()
   @Expose()
   public CLIENT_URL = 'http://localhost:3000';
 
+  @IsNotEmpty()
   @Expose()
   public COOKIE_SECRET = 'secret';
 
@@ -30,15 +32,23 @@ export class EnvironmentVariablesSchema {
   @IsNotEmpty()
   public DATABASE_PASSWORD: string;
 
+  @IsInt()
   @Expose()
   @Type(() => Number)
   public PORT = 3000;
 }
 
 export const validate = (config: Record<string, unknown>) => {
-  const validatedConfig = plainToInstance(EnvironmentVariablesSchema, config, {
-    enableImplicitConversion: true,
-  });
+  const validatedConfig = plainToInstance(
+    EnvironmentVariablesSchema,
+    {
+      ...new EnvironmentVariablesSchema(),
+      ...config,
+    },
+    {
+      enableImplicitConversion: true,
+    },
+  );
   const errors = validateSync(validatedConfig, {
     skipMissingProperties: false,
   });
