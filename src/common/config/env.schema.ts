@@ -3,12 +3,10 @@ import { IsInt, IsNotEmpty, validateSync } from 'class-validator';
 
 export class EnvironmentVariablesSchema {
   @Expose()
-  @IsNotEmpty()
   public CLIENT_URL = 'http://localhost:3000';
 
   @Expose()
-  @IsNotEmpty()
-  public COOKIE_SECRET: string;
+  public COOKIE_SECRET = 'secret';
 
   @Expose()
   @IsNotEmpty()
@@ -33,7 +31,6 @@ export class EnvironmentVariablesSchema {
   public DATABASE_PASSWORD: string;
 
   @Expose()
-  @IsInt()
   @Type(() => Number)
   public PORT = 3000;
 }
