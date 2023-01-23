@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { CreateUserDto } from './create-user.dto';
 import { UsersService } from './users.service';
 
@@ -7,7 +7,7 @@ export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Get(':id')
-  async getById(@Param('id') id: string) {
+  async getById(@Param ('id', new ParseUUIDPipe()) id: string) {
     return this.userService.findById(id);
   }
 

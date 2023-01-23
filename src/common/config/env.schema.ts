@@ -2,38 +2,38 @@ import { Expose, plainToInstance, Type } from "class-transformer";
 import { IsInt, IsNotEmpty, validateSync } from "class-validator";
 
 export class EnvironmentVariablesSchema {
-  @IsNotEmpty()
   @Expose()
+  @IsNotEmpty()
   public CLIENT_URL = 'http://localhost:3000';
 
-  @IsNotEmpty()
   @Expose()
+  @IsNotEmpty()
   public COOKIE_SECRET: string;
 
-  @IsNotEmpty()
   @Expose()
+  @IsNotEmpty()
   public DATABASE_NAME: string;
 
-  @IsNotEmpty()
   @Expose()
+  @IsNotEmpty()
   public DATABASE_HOSTNAME: string;
 
-  @IsNotEmpty()
-  @IsInt()
   @Expose()
+  @IsInt()
   @Type(() => Number)
+  @IsNotEmpty()
   public DATABASE_PORT: number;
 
-  @IsNotEmpty()
   @Expose()
+  @IsNotEmpty()
   public DATABASE_USERNAME: string;
 
-  @IsNotEmpty()
   @Expose()
+  @IsNotEmpty()
   public DATABASE_PASSWORD: string;
 
-  @IsInt()
   @Expose()
+  @IsInt()
   @Type(() => Number)
   public PORT = 3000;
 }
