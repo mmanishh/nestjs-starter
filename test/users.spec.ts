@@ -1,9 +1,12 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import request from 'supertest';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
+import { Repository } from 'typeorm';
 import { AppModule } from 'modules/app/app.module';
+import { UsersEntity } from 'modules/users/users.entity';
 import * as usersResponse from './mocks/users.json';
 import { createDummyUserServiceServer } from './mocks/dummy-user-service-server';
 
@@ -11,6 +14,7 @@ describe('UsersController (integration)', () => {
   let app: INestApplication;
   let dummyUserServiceServerClose: () => void;
   let postgresContainer: StartedTestContainer;
+  let usersRepository: Repository<UsersEntity>;
   const databaseConfig = {
     databaseName: 'nestjs-starter-db',
     databaseUsername: 'user',
@@ -52,7 +56,12 @@ describe('UsersController (integration)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+    usersRepository = app.get(getRepositoryToken(UsersEntity));
     await app.init();
+  });
+
+  beforeEach(async () => {
+    await usersRepository.delete({});
   });
 
   afterAll(async () => {
@@ -66,8 +75,8 @@ describe('UsersController (integration)', () => {
       return request(app.getHttpServer())
         .get('/users?type=user')
         .expect(HttpStatus.OK)
-        .then((res) => {
-          expect(res.body).toEqual(usersResponse);
+        .then((response) => {
+          expect(response.body).toEqual(usersResponse);
         });
     });
 
@@ -75,6 +84,33 @@ describe('UsersController (integration)', () => {
       return request(app.getHttpServer())
         .get('/users?type=admin')
         .expect(HttpStatus.FORBIDDEN);
+    });
+  });
+
+  describe('/users/:id (GET)', () => {
+    it('should return found user', async () => {
+      const userId = 'b618445a-0089-43d5-b9ca-e6f2fc29a11d';
+      const userDetails = {
+        id: userId,
+        firstName: 'tester',
+      };
+      const newUser = await usersRepository.create(userDetails);
+      await usersRepository.save(newUser);
+
+      return request(app.getHttpServer())
+        .get(`/users/${userId}`)
+        .expect(HttpStatus.OK)
+        .then((response) => {
+          expect(response.body).toEqual(userDetails);
+        });
+    });
+
+    it('should return 404 error when user is not found', async () => {
+      const userId = 'b618445a-0089-43d5-b9ca-e6f2fc29a11d';
+
+      return request(app.getHttpServer())
+        .get(`/users/${userId}`)
+        .expect(HttpStatus.NOT_FOUND);
     });
   });
 });
