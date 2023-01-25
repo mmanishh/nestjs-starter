@@ -57,6 +57,8 @@ jobs:
 
       - run: npm test
 
+      - run: npm run test:integration
+
       - run: npm run test:e2e
         env:
           DATABASE_USERNAME: ${{ matrix.database-user }}
