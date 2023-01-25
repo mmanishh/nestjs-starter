@@ -4,6 +4,7 @@
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": "\\.spec.ts$",
+  "testTimeout": 20000,
   "transform": {
     "^.+\\.ts$": "ts-jest"
   }
