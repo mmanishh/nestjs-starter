@@ -58,6 +58,7 @@ describe('UsersController (integration)', () => {
   afterAll(async () => {
     await app.close();
     dummyUserServiceServerClose();
+    await postgresContainer.stop();
   });
 
   describe('/users (GET)', () => {
