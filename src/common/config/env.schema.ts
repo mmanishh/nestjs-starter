@@ -12,25 +12,25 @@ export class EnvironmentVariablesSchema {
 
   @Expose()
   @IsNotEmpty()
-  public DATABASE_NAME: string;
+  public DATABASE_NAME = 'placeholder';
 
   @Expose()
   @IsNotEmpty()
-  public DATABASE_HOSTNAME: string;
+  public DATABASE_HOSTNAME = 'placeholder';
 
   @Expose()
   @IsInt()
   @Type(() => Number)
   @IsNotEmpty()
-  public DATABASE_PORT: number;
+  public DATABASE_PORT = 5432;
 
   @Expose()
   @IsNotEmpty()
-  public DATABASE_USERNAME: string;
+  public DATABASE_USERNAME = 'placeholder';
 
   @Expose()
   @IsNotEmpty()
-  public DATABASE_PASSWORD: string;
+  public DATABASE_PASSWORD = 'placeholder';
 
   @IsInt()
   @Expose()
