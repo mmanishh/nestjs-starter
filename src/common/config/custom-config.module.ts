@@ -2,8 +2,6 @@ import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import path from 'path';
-import { DataSource } from 'typeorm';
-import { addTransactionalDataSource } from 'typeorm-transactional';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { CustomConfigService } from './custom-config.service';
 import { validate } from './env.schema';
@@ -37,8 +35,6 @@ import { validate } from './env.schema';
           password: configService.DATABASE_PASSWORD,
           database: configService.DATABASE_NAME,
         } as PostgresConnectionOptions),
-      dataSourceFactory: async (options) =>
-        addTransactionalDataSource(new DataSource(options)).initialize(),
     }),
   ],
   providers: [CustomConfigService],

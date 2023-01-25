@@ -5,6 +5,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateUserDto } from './create-user.dto';
 import { UsersService } from './users.service';
@@ -19,8 +20,8 @@ export class UsersController {
   }
 
   @Get()
-  async getAll() {
-    return this.userService.findAll();
+  async getAll(@Query('type') type: string) {
+    return this.userService.findAll(type);
   }
 
   @Post()

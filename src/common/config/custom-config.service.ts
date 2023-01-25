@@ -36,4 +36,8 @@ export class CustomConfigService {
   public get PORT(): number {
     return Number(this.configService.get('PORT'));
   }
+
+  public get USER_SERVICE_URL(): string {
+    return String(this.configService.get('USER_SERVICE_URL'));
+  }
 }

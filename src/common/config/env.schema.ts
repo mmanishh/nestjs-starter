@@ -36,6 +36,10 @@ export class EnvironmentVariablesSchema {
   @Expose()
   @Type(() => Number)
   public PORT = 3000;
+
+  @Expose()
+  @IsNotEmpty()
+  public USER_SERVICE_URL = 'https://jsonplaceholder.typicode.com';
 }
 
 export const validate = (config: Record<string, unknown>) => {
