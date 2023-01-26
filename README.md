@@ -41,6 +41,7 @@ npm run lint:fix
 
 ```bash
 npm test
+npm run test:integration
 npm run test:e2e
 ```
 
