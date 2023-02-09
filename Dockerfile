@@ -13,11 +13,9 @@ RUN npm run build
 
 FROM node:18.12.1-alpine3.15 as app_stage
 
-RUN mkdir -p /home/app && chown -R node:node /home/app
+RUN mkdir -p /home/app
 
 WORKDIR /home/app
-
-USER node
 
 COPY --from=build_stage /home/src/package*.json ./
 
