@@ -16,28 +16,33 @@ import { validate } from './env.schema';
     TypeOrmModule.forRootAsync({
       inject: [CustomConfigService],
       useFactory: (configService: CustomConfigService) =>
-        ({
-          logging: false,
-          entities: [path.resolve(`${__dirname}/../../**/**.entity{.ts,.js}`)],
-          migrations: [
-            path.resolve(
-              `${__dirname}/../../../database/migrations/*{.ts,.js}`,
-            ),
-          ],
-          migrationsRun: true,
-          migrationsTableName: 'migrations',
-          keepConnectionAlive: true,
-          synchronize: false,
-          type: 'postgres',
-          host: configService.DATABASE_HOSTNAME,
-          port: configService.DATABASE_PORT,
-          username: configService.DATABASE_USERNAME,
-          password: configService.DATABASE_PASSWORD,
-          database: configService.DATABASE_NAME,
-        } as PostgresConnectionOptions),
+      ({
+        logging: false,
+        entities: [path.resolve(`${__dirname}/../../**/**.entity{.ts,.js}`)],
+        migrations: [
+          path.resolve(
+            `${__dirname}/../../../database/migrations/*{.ts,.js}`,
+          ),
+        ],
+        migrationsRun: true,
+        migrationsTableName: 'migrations',
+        keepConnectionAlive: true,
+        synchronize: false,
+        type: 'postgres',
+        host: configService.DATABASE_HOSTNAME,
+        port: configService.DATABASE_PORT,
+        username: configService.DATABASE_USERNAME,
+        password: configService.DATABASE_PASSWORD,
+        database: configService.DATABASE_NAME,
+        extra: {
+          ssl: process.env.NODE_ENV === 'production'
+            ? { rejectUnauthorized: false }
+            : false,
+        }
+      } as PostgresConnectionOptions),
     }),
   ],
   providers: [CustomConfigService],
   exports: [CustomConfigService],
 })
-export class CustomConfigModule {}
+export class CustomConfigModule { }

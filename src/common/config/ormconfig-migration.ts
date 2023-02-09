@@ -16,6 +16,11 @@ const config = new DataSource({
   migrationsTableName: 'migrations',
   logging: true,
   synchronize: false,
+  extra: {
+    ssl: process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
+  }
 });
 
 export default config;
