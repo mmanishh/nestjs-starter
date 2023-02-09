@@ -20,10 +20,6 @@ async function bootstrap(): Promise<void> {
   const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
   const configService = app.get(CustomConfigService);
 
-  app.enableCors({
-    credentials: true,
-    origin: configService.CLIENT_URL,
-  });
   app.enableShutdownHooks();
   app.get(AppModule).subscribeToShutdown(() => app.close());
 
